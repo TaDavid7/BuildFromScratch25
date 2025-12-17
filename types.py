@@ -1,0 +1,1 @@
+#find out what datatype each column is, int, float, string
