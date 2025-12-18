@@ -1,7 +1,7 @@
 #main.py
 
 from read_csv import load_csv
-from query import select, print_format
+from query import select, print_format, count
 
 def main():
     #print statements
@@ -11,6 +11,7 @@ def main():
     print("  rows")
     print("  select <col1> <col2> ...")
     print("  exit")
+    print("  count <Header> <Value>")
 
     header = []
     rows = []
@@ -44,6 +45,16 @@ def main():
                     print(print_format(result)) 
             except ValueError as e:
                 print(e)
+
+        elif cmd.startswith("count "):
+            column = cmd.split()[1]
+            value = cmd.split()[2]
+            print("Header: " + column + ", Value: " + value)
+            print(str(count(column, value, header, rows)) + " matches found")
         
+        
+        else:
+            print("Not a valid command")
+
 if __name__ == "__main__":
     main()
