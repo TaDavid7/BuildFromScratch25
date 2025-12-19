@@ -1,7 +1,7 @@
 #main.py
 
 from read_csv import load_csv
-from query import select, print_format, count
+from query import select, print_format, compare
 
 """
 These are comments
@@ -75,12 +75,11 @@ def main():
             
             print("Number of rows: ", len(rows))
 
-        elif cmd.startswith("select "):
+        elif cmd.startswith("VIEW "):
             if not rows:
                 print("No data")
                 continue
             columns = cmd.split(" ")[1:]
-            
             try:
                 if columns[0] == "*":
                     print(header, "\n", rows)
@@ -89,6 +88,47 @@ def main():
                     print(print_format(result)) 
             except ValueError as e:
                 print(e)
+            
+            #start of WHERE and RANGE block
+            new_row = []
+            tokens = cmd.split()
+            if "WHERE" in tokens:
+                where_index = tokens.index("WHERE")
+            else:
+                where_index = -1
+            if where_index != -1:
+                where_block = tokens[where_index + 1:]
+                if len(where_block) != 3:
+                    print("Invalid syntax for WHERE clause")
+                    continue
+                column, symbol, value = where_block
+                if column not in header:
+                    print("Column not found")
+                    continue
+                col_index = header.index(column)
+                for row in rows:
+                    if compare(row[col_index], symbol, value):
+                        new_row.append(row)
+            else:
+                new_row = rows
+            #new_row is rows but now filtered with WHERE condition
+            newer_row = []
+            if "RANGE" in tokens:
+                range_index = tokens.index("RANGE")
+            else:
+                range_index = -1
+            if range_index != -1:
+                range_block = tokens[range_index + 1:]
+                if len(range_block) != 2:
+                    print("Invalid syntax for RANGE clause")
+                    continue
+                index1, index2 = map(int, range_block)
+                index1 -= 1
+                for i in range(index1, index2):
+                    newer_row.append(new_row[i])
+            else:
+                newer_row = new_row
+            #newer_row is the final filtered version of rows
 
         elif cmd.startswith("count "):
             
