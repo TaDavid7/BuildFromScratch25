@@ -72,32 +72,34 @@ def main():
             print("Columns: ", header)
 
         elif cmd == "rows":
-            
+                
             print("Number of rows: ", len(rows))
 
         elif cmd.startswith("VIEW "):
             if not rows:
                 print("No data")
                 continue
-            columns = cmd.split(" ")[1:]
-            try:
-                if columns[0] == "*":
-                    print(header, "\n", rows)
-                else:
-                    result = select(path, columns)
-                    print(print_format(result)) 
-            except ValueError as e:
-                print(e)
+            tokens = cmd.split() 
+            if "*" in tokens:
+                selected_cols = header
+            else:
+                selected_cols = []
+                for index in tokens[1:]:
+                    if index in ("WHERE", "RANGE", "MAX", "MIN", "AVG", "RCOUNT"):
+                        break
+                    if index not in header:
+                        print("Invalid Syntax: column not found in file")
+                        break
+                    selected_cols.append(index)
             
             #start of WHERE and RANGE block
-            new_row = []
-            tokens = cmd.split()                            #make sure the WHERE and RANGE limit select first. The array is updated but not the print
+            new_row = []                           #make sure the WHERE and RANGE limit select first. The array is updated but not the print
             if "WHERE" in tokens:
                 where_index = tokens.index("WHERE")
             else:
                 where_index = -1
             if where_index != -1:
-                where_block = tokens[where_index + 1:]      
+                where_block = tokens[where_index + 1:where_index + 4]      
                 if len(where_block) != 3:
                     print("Invalid syntax for WHERE clause")
                     continue
@@ -118,7 +120,7 @@ def main():
             else:
                 range_index = -1
             if range_index != -1:
-                range_block = tokens[range_index + 1:]
+                range_block = tokens[range_index + 1:range_index + 3]
                 if len(range_block) != 2:
                     print("Invalid syntax for RANGE clause")
                     continue

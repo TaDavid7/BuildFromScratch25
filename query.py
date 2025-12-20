@@ -82,26 +82,6 @@ def avg(rows, col):
 
 def rcount(rows):
     return len(rows)
-    
-
-def compare(val1, sym, val2):
-    if sym == "<":
-        return (val1<val2)
-    elif sym == ">":
-        return (val1>val2)
-    elif sym == "<=":
-        return (val1<=val2)
-    elif sym == ">=":
-        return (val1>=val2)
-    elif sym == "==":
-        return (val1==val2)
-    elif sym == "!=":
-        return (val1!=val2)
-    else:
-        return False
-
-
-
 
 def count(column, data, header, rows):
     index = -1
