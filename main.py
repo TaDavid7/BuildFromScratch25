@@ -135,7 +135,7 @@ def main():
             column = cmd.split()[1]
             value = cmd.split()[2]
             print("Header: " + column + ", Value: " + value)
-            print(str(count(column, value, header, rows)) + " matches found")
+            print(str(compare(column, value, header, rows)) + " matches found")
         
         
         else:

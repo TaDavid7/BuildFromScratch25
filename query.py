@@ -1,6 +1,26 @@
 #operations
 #filtering, aggregations, group by
 import csv
+def compare(init, operator, condition):
+    try:
+        init = float(init)
+        condition = float(condition)
+    except ValueError:
+        pass
+    if operator == "=":
+        return init == condition
+    elif operator == "!=":
+        return init != condition
+    elif operator == ">":
+        return init > condition
+    elif operator == "<":
+        return init < condition
+    elif operator == ">=":
+        return init >= condition
+    elif operator == "<=":
+        return init <= condition
+    else:
+        raise ValueError("Invalid Operator")
 
 def print_format(result):
     if not result:
