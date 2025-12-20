@@ -1,7 +1,7 @@
 #main.py
 
 from read_csv import load_csv
-from query import select, print_format, compare
+from query import select, print_format, compare, count, max, min, avg, rcount
 
 """
 These are comments
@@ -91,13 +91,13 @@ def main():
             
             #start of WHERE and RANGE block
             new_row = []
-            tokens = cmd.split()
+            tokens = cmd.split()                            #make sure the WHERE and RANGE limit select first. The array is updated but not the print
             if "WHERE" in tokens:
                 where_index = tokens.index("WHERE")
             else:
                 where_index = -1
             if where_index != -1:
-                where_block = tokens[where_index + 1:]
+                where_block = tokens[where_index + 1:]      
                 if len(where_block) != 3:
                     print("Invalid syntax for WHERE clause")
                     continue
@@ -129,6 +129,37 @@ def main():
             else:
                 newer_row = new_row
             #newer_row is the final filtered version of rows
+            if "MAX" in tokens:
+                max_index = tokens.index("MAX")
+            else:
+                max_index = -1
+            if max_index != -1:
+                max_col = tokens[max_index+1]
+                max(newer_row, max_col)
+
+            if "MIN" in tokens:
+                min_index = tokens.index("MIN")
+            else:
+                min_index = -1
+            if min_index != -1:
+                min_col = tokens[min_index+1]
+                min(newer_row, min_col)
+
+            if "AVG" in tokens:
+                avg_index = tokens.index("AVG")
+            else:
+                avg_index = -1
+            if avg_index != -1:
+                avg_col = tokens[avg_index+1]
+                avg(newer_row, avg_col)
+
+            if "RCOUNT" in tokens:
+                rcount_index = tokens.index("AVG")
+            else:
+                avg_index = -1
+            if avg_index != -1:
+                rcount(newer_row)
+
 
         elif cmd.startswith("count "):
             

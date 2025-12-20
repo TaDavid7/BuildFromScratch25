@@ -58,6 +58,50 @@ def select(path, columns):
             result.append(selected)
     return result
 
+def max(rows, col):
+    max = rows[0][col]
+    for row in rows:
+        if row[col] > max:
+            max = row[col]
+    return max
+
+def min(rows, col):
+    min = rows[0][col]
+    for row in rows:
+        if row[col] < min:
+            min = row[col]
+    return min
+
+def avg(rows, col):
+    sum = 0    #I might change this later so its safe integer bounds
+    count = 0
+    for row in rows:
+        sum += row[col]
+        count += 1
+    return (sum/count)
+
+def rcount(rows):
+    return len(rows)
+    
+
+def compare(val1, sym, val2):
+    if sym == "<":
+        return (val1<val2)
+    elif sym == ">":
+        return (val1>val2)
+    elif sym == "<=":
+        return (val1<=val2)
+    elif sym == ">=":
+        return (val1>=val2)
+    elif sym == "==":
+        return (val1==val2)
+    elif sym == "!=":
+        return (val1!=val2)
+    else:
+        return False
+
+
+
 
 def count(column, data, header, rows):
     index = -1
@@ -77,6 +121,7 @@ def count(column, data, header, rows):
         if rows[j][index] == data:
             total += 1
     return total
+
 
 
     
