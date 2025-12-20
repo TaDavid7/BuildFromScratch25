@@ -72,7 +72,7 @@ def main():
             print("Columns: ", header)
 
         elif cmd == "rows":
-                
+
             print("Number of rows: ", len(rows))
 
         elif cmd.startswith("VIEW "):
@@ -129,7 +129,7 @@ def main():
                 for i in range(index1, index2):
                     newer_row.append(new_row[i])
             else:
-                newer_row = new_row
+                newer_row = new_row[index1:index2]
             #newer_row is the final filtered version of rows
             if "MAX" in tokens:
                 max_index = tokens.index("MAX")
