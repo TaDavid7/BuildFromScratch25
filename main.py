@@ -51,9 +51,10 @@ def main():
     print("Database")
     print("Commands:")
     print("  load <csv_path>")
-    print("  rows")
-    print("  count <Header> <Value>")
-    print("  select <col1> <col2> ...")
+    print("  VIEW <col1> <col2> ...")
+    print("  WHERE <col> <symbol <value>")
+    print("  RANGE <idx1> <idx2>")
+    print("  MAX <col> MIN <col> AVG<col> RCOUNT")
     print("  exit")
 
     header = []
@@ -69,7 +70,7 @@ def main():
             path = cmd.split(" ")[1]
             header, rows = load_csv(path)
             print("File Loaded")
-            print("Columns: ", header)
+            print("Columns: ", header, "\n")
 
         elif cmd == "rows":
 
@@ -77,7 +78,7 @@ def main():
 
         elif cmd.startswith("VIEW "):
             if not rows:
-                print("No data")
+                print("No data", "\n")
                 continue
             tokens = cmd.split() 
             if "*" in tokens:
@@ -125,11 +126,12 @@ def main():
                     print("Invalid syntax for RANGE clause")
                     continue
                 index1, index2 = map(int, range_block)
-                index1 -= 1
-                for i in range(index1, index2):
+                if(index2>len(new_row)):
+                    index2 = len(new_row)-1
+                for i in range(index1, index2+1):
                     newer_row.append(new_row[i])
             else:
-                newer_row = new_row[index1:index2]
+                newer_row = new_row
             #newer_row is the final filtered version of rows
 
             func_names = []
@@ -170,7 +172,7 @@ def main():
                 values.append(avg_result)
 
             if "RCOUNT" in tokens:
-                rcount_index = tokens.index("AVG")
+                rcount_index = tokens.index("RCOUNT")
             else:
                 rcount_index = -1
             if rcount_index != -1:

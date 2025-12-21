@@ -94,9 +94,9 @@ def avg(rows, col):
     sum = 0    #I might change this later so its safe integer bounds
     count = 0
     for row in rows:
-        sum += row[col]
+        sum += int(row[col])
         count += 1
-    return (sum/count)
+    return round((sum/count), 2)
 
 def rcount(rows):
     return len(rows)
