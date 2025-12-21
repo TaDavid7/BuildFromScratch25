@@ -22,20 +22,38 @@ def compare(init, operator, condition):
     else:
         raise ValueError("Invalid Operator")
 
-def print_format(result):
-    if not result:
+def print_format(header, rows, func, values):
+    if not header:
         return ""
-    columns = list(result[0].keys())
-    lines = []
-    header = " | ".join(columns)
-    lines.append(header)
-    lines.append("-------------")
-    for row in result:
-        values = []
-        for col in columns:
-            values.append(row[col])
-        lines.append(" | ".join(values))
-    return "\n".join(lines)
+    if not rows:
+        return ""
+    result = []
+
+    #format header
+    merged_header = header + func
+    formatted_header = [
+        f"{col:<{10}}" for col in merged_header
+    ]
+    first_row = "".join(formatted_header) # col1    col2     col3 ...
+    result.append(first_row)
+    result.append(("-" * len(header)*10) + "|" + ("-"*len(func)*10))
+
+    #format rows
+    firstTime = True
+    for row in rows:
+        if(firstTime):
+            merged_row = row + values
+            formatted_row = [f"{item:<{10}}" for item in merged_row]
+            firstTime = False
+            result.append((" ").join(formatted_row))
+            continue
+        formatted_row = [f"{item:<{10}}" for item in row]
+        result.append((" ").join(formatted_row))
+
+
+    result.append("")
+    return "\n".join(result)
+
 
 def select(path, columns):
 

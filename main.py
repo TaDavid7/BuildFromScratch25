@@ -131,36 +131,55 @@ def main():
             else:
                 newer_row = new_row
             #newer_row is the final filtered version of rows
+
+            func_names = []
+            values = []
+            col_call = 0
+            col_name = ""
             if "MAX" in tokens:
                 max_index = tokens.index("MAX")
             else:
                 max_index = -1
             if max_index != -1:
-                max_col = tokens[max_index+1]
-                max(newer_row, max_col)
+                col_name = tokens[max_index+1]
+                col_call = header.index(col_name)
+                max_result = max(newer_row, col_call)
+                func_names.append(("MAX " + col_name))
+                values.append(max_result)
 
             if "MIN" in tokens:
                 min_index = tokens.index("MIN")
             else:
                 min_index = -1
             if min_index != -1:
-                min_col = tokens[min_index+1]
-                min(newer_row, min_col)
+                col_name = tokens[min_index+1]
+                col_call = header.index(col_name)
+                min_result = min(newer_row, col_call)
+                func_names.append(("MIN " + col_name))
+                values.append(min_result)
 
             if "AVG" in tokens:
                 avg_index = tokens.index("AVG")
             else:
                 avg_index = -1
             if avg_index != -1:
-                avg_col = tokens[avg_index+1]
-                avg(newer_row, avg_col)
+                col_name = tokens[avg_index+1]
+                col_call = header.index(col_name)
+                avg_result = avg(newer_row, col_call)
+                func_names.append(("AVG " + col_name))
+                values.append(avg_result)
 
             if "RCOUNT" in tokens:
                 rcount_index = tokens.index("AVG")
             else:
-                avg_index = -1
-            if avg_index != -1:
-                rcount(newer_row)
+                rcount_index = -1
+            if rcount_index != -1:
+                rcount_result = rcount(newer_row)
+                func_names.append("RCOUNT")
+                values.append(rcount_result)
+
+            view = print_format(header, newer_row, func_names, values)
+            print(view)
 
 
         elif cmd.startswith("count "):
