@@ -22,33 +22,37 @@ def compare(init, operator, condition):
     else:
         raise ValueError("Invalid Operator")
 
-def print_format(header, rows, func, values):
+def print_format(header, rows, func, values, every):
     if not header:
         return ""
     if not rows:
         return ""
     result = []
 
+    indexCol = []
+    for index, col in enumerate(every):
+        if col in header:
+            indexCol.append(index)
     #format header
     merged_header = header + func
     formatted_header = [
-        f"{col:<{10}}" for col in merged_header
+        f"{col:<{15}}" for col in merged_header #list of strings
     ]
-    first_row = "".join(formatted_header) # col1    col2     col3 ...
+    first_row = "".join(formatted_header)# string
     result.append(first_row)
-    result.append(("-" * len(header)*10) + "|" + ("-"*len(func)*10))
+    result.append(("-" * len(header)*15) + "|" + ("-"*len(func)*15))
 
     #format rows
     firstTime = True
     for row in rows:
         if(firstTime):
-            merged_row = row + values
-            formatted_row = [f"{item:<{10}}" for item in merged_row]
+            merged_row = [row[i] for i in indexCol] + values
+            formatted_row = [f"{item:<{15}}" for item in merged_row]
             firstTime = False
-            result.append((" ").join(formatted_row))
+            result.append(("").join(formatted_row))
             continue
-        formatted_row = [f"{item:<{10}}" for item in row]
-        result.append((" ").join(formatted_row))
+        formatted_row = [f"{item:<{15}}" for item in [row[i] for i in indexCol]]
+        result.append(("").join(formatted_row))
 
 
     result.append("")
@@ -113,13 +117,18 @@ def count(column, data, header, rows):
     if index == -1:
         print("Header not found")
         return 0
-    target = data
     #check for matches
     for j in range(len(rows)):
         if rows[j][index] == data:
             total += 1
     return total
 
-
-
+def insertRow(path, row):
+    with open(path, 'a', newline='\n') as f:
+        writer = csv.writer(f)
+        writer.writerows(row)
     
+def createHeader(path, header):
+    with open(path, 'w', newline='\n') as f:
+        writer = csv.writer(f)
+        writer.writerows(header)
