@@ -1,7 +1,5 @@
 #main.py
 
-from read_csv import load_csv
-from query import select, print_format, compare, count, max, min, avg, rcount
 
 """
 These are comments
@@ -43,6 +41,8 @@ Explain
 UPDATE - do this later
 
 """
+from read_csv import load_csv
+from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader
 
 
 
@@ -51,6 +51,8 @@ def main():
     print("Database")
     print("Commands:")
     print("  load <csv_path>")
+    print("  CREATE <filename>")
+    print("  INSERT <val1> <val2> ...")
     print("  VIEW <col1> <col2> ...")
     print("  WHERE <col> <symbol <value>")
     print("  RANGE <idx1> <idx2>")
@@ -67,7 +69,7 @@ def main():
             break
         
         elif cmd.startswith("load "):
-            path = cmd.split(" ")[1]
+            path = "data/" + cmd.split(" ")[1] + ".csv"
             header, rows = load_csv(path)
             print("File Loaded")
             print("Columns: ", header, "\n")
@@ -75,6 +77,31 @@ def main():
         elif cmd == "rows":
 
             print("Number of rows: ", len(rows))
+
+        elif cmd.startswith("CREATE "):
+            create = cmd.split()
+            path = "data/" + create[1] + ".csv"
+            cols = create[2:]
+            colsnew = []
+            colsnew.append(cols)
+            createHeader(path, colsnew)
+            print(f"File '{path}' created successfully")
+
+        elif cmd.startswith("INSERT "):
+            if not header:
+                print("No data", "\n")
+                continue
+            values = cmd.split()
+            values_block = values[1:]
+            row_block = []
+            row_block.append(values_block)
+            if len(values_block) != len(header):
+                print("Please insert a valid row")
+                continue
+            insertRow(path, row_block)
+            header, rows = load_csv(path)
+            view = print_format(header, rows, [], [], header)
+            print(view)
 
         elif cmd.startswith("VIEW "):
             if not rows:
@@ -87,10 +114,10 @@ def main():
                 selected_cols = []
                 for index in tokens[1:]:
                     if index in ("WHERE", "RANGE", "MAX", "MIN", "AVG", "RCOUNT"):
-                        break
+                        continue
                     if index not in header:
                         print("Invalid Syntax: column not found in file")
-                        break
+                        continue
                     selected_cols.append(index)
             
             #start of WHERE and RANGE block
@@ -180,7 +207,7 @@ def main():
                 func_names.append("RCOUNT")
                 values.append(rcount_result)
 
-            view = print_format(header, newer_row, func_names, values)
+            view = print_format(selected_cols, newer_row, func_names, values, header)
             print(view)
 
 
