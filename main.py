@@ -42,7 +42,7 @@ UPDATE - do this later
 
 """
 from read_csv import load_csv
-from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader
+from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader, update
 
 
 
@@ -51,6 +51,7 @@ def main():
     print("Database")
     print("Commands:")
     print("  load <csv_path>")
+    print("  UPDATE <col> <row> <value>")
     print("  CREATE <filename>")
     print("  INSERT <val1> <val2> ...")
     print("  VIEW <col1> <col2> ...")
@@ -77,6 +78,15 @@ def main():
         elif cmd == "rows":
 
             print("Number of rows: ", len(rows))
+
+        elif cmd.startswith("UPDATE "):
+            update = cmd.split()
+            update_block = update[1:3]
+            col = update_block[1]
+            data = update_block[3]
+            update(rows, col, data, header)
+            view = print_format(header, rows, [], [], header)
+            print(view)
 
         elif cmd.startswith("CREATE "):
             create = cmd.split()
