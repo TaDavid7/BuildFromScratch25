@@ -134,12 +134,15 @@ def createHeader(path, header):
         writer.writerows(header)
 
 def updateFile(rows, column, edit, header, path):
+    if column not in header:
+        print("Column not found")
+        return
     for i in range(len(header)):
         if(header[i] == column):
             index = i
     for row in rows:
         row[index] = edit
-    with open(path, "w") as f:
+    with open(path, "w", newline = "", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(header)
         writer.writerows(rows)
