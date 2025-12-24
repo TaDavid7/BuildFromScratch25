@@ -42,7 +42,7 @@ UPDATE - do this later
 
 """
 from read_csv import load_csv
-from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader, update
+from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader, updateFile
 
 
 
@@ -81,11 +81,32 @@ def main():
 
         elif cmd.startswith("UPDATE "):
             update = cmd.split()
-            update_block = update[1:3]
-            col = update_block[1]
-            data = update_block[3]
-            update(rows, col, data, header)
-            view = print_format(header, rows, [], [], header)
+            update_block = update[1:4]
+            col = update_block[0]
+            data = update_block[2]
+            new_row = []                           #make sure the WHERE and RANGE limit select first. The array is updated but not the print
+            if "WHERE" in update:
+                where_index = update.index("WHERE")
+            else:
+                where_index = -1
+            if where_index != -1:
+                where_block = update[where_index + 1:where_index + 4]      
+                if len(where_block) != 3:
+                    print("Invalid syntax for WHERE clause")
+                    continue
+                column, symbol, value = where_block
+                if column not in header:
+                    print("Column not found")
+                    continue
+                col_index = header.index(column)
+                for row in rows:
+                    if compare(row[col_index], symbol, value):
+                        new_row.append(row)
+            else:
+                new_row = rows
+            print(new_row)
+            updateFile(new_row, col, data, header)
+            view = print_format(header, new_row, [], [], header)
             print(view)
 
         elif cmd.startswith("CREATE "):

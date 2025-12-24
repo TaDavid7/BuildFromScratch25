@@ -132,3 +132,11 @@ def createHeader(path, header):
     with open(path, 'w', newline='\n') as f:
         writer = csv.writer(f)
         writer.writerows(header)
+
+def updateFile(rows, column, edit, header):
+    for i in range(len(header)):
+        if(header[i] == column):
+            index = i
+    for row in rows:
+        row[index] = edit
+    
