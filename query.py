@@ -133,10 +133,14 @@ def createHeader(path, header):
         writer = csv.writer(f)
         writer.writerows(header)
 
-def updateFile(rows, column, edit, header):
+def updateFile(rows, column, edit, header, path):
     for i in range(len(header)):
         if(header[i] == column):
             index = i
     for row in rows:
         row[index] = edit
+    with open(path, "w") as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(rows)
     
