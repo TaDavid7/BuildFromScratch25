@@ -133,7 +133,7 @@ def createHeader(path, header):
         writer = csv.writer(f)
         writer.writerows(header)
 
-def updateFile(rows, column, edit, header, path):
+def updateFile(rows, column, edit, header, path, old_rows):
     if column not in header:
         print("Column not found")
         return
@@ -145,5 +145,8 @@ def updateFile(rows, column, edit, header, path):
     with open(path, "w", newline = "", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(header)
-        writer.writerows(rows)
-    
+        for old_row in old_rows:
+            if old_row in rows:
+                writer.writerow(old_row)
+            else:
+                writer.writerow(old_row)

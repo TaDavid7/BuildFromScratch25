@@ -104,7 +104,7 @@ def main():
                         new_row.append(row)
             else:
                 new_row = rows
-            updateFile(new_row, col, data, header, path)
+            updateFile(new_row, col, data, header, path, rows)
             view = print_format(header, new_row, [], [], header)
             print(view)
 
