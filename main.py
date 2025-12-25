@@ -42,7 +42,7 @@ UPDATE - do this later
 
 """
 from read_csv import load_csv
-from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader, updateFile
+from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader, updateFile, updateRow
 
 
 
@@ -132,6 +132,7 @@ def main():
             header, rows = load_csv(path)
             view = print_format(header, rows, [], [], header)
             print(view)
+            rows = updateRow(path)
 
         elif cmd.startswith("VIEW "):
             if not rows:

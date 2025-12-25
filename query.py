@@ -150,3 +150,12 @@ def updateFile(rows, column, edit, header, path, old_rows):
                 writer.writerow(old_row)
             else:
                 writer.writerow(old_row)
+
+def updateRow(path):
+    row = []
+    with open(path, "r") as f:
+        lines = f.read().splitlines()
+    
+    for line in lines[1:]:
+        row.append(line.split(","))
+    return row
