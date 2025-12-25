@@ -28,11 +28,11 @@ INSERT \<value1>\<value2> ...
 UPDATE \<column> = \<value> WHERE \<condition>  
 DELETE WHERE \<condition>  
 VIEW \<columns> WHERE \<conditions> RANGE \<start> \<end> \<aggregation>\<col>  # note WHERE and RANGE are both optional
-EXPLAIN <any command>
+EXPLAIN \<any command>
 
 ---
-### How it works
-To start playing around with a database run
+### How to run it
+To start playing around with a database first
 1. Clone the repository
 2. Make sure Python 3 (or latest version is installed)
 3. Run python main.py in the terminal
@@ -44,16 +44,8 @@ Type these commands to get started with your own database
 CREATE database_name
 load database_name
 ```
-After that, the different commands you can do depends on what main operations you want to do (VIEW, UPDATE, DELETE, INSERT). Note these main commands cannot be used together.
-```graphql
-VIEW col1 col2 ... WHERE ... RANGE ... MAX ...
-```
-```graphql
-UPDATE col = val WHERE ...
-```
-```graphql
-DELETE WHERE ...
-```
+After that, the different commands you can do depends on what main operations you want to do (VIEW, UPDATE, DELETE, INSERT). Note these main commands cannot be used together. To get started, insert values first into the database that you can then test around with
+
 ```graphql
 INSERT val1 val2 ...
 ```
@@ -96,5 +88,6 @@ EXPLAIN VIEW * WHERE name = DAVID AND age = 16 RANGE 1 5 RCOUNT
 - More aggregations / group-by expansions
 
 ---
+
 
 
