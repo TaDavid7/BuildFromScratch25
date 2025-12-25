@@ -94,18 +94,35 @@ def main():
             else:
                 where_index = -1
             if where_index != -1:
-                where_block = update[where_index + 1:where_index + 4]      
-                if len(where_block) != 3:
-                    print("Invalid syntax for WHERE clause")
-                    continue
-                column, symbol, value = where_block
-                if column not in header:
-                    print("Column not found")
-                    continue
-                col_index = header.index(column)
-                for row in rows:
-                    if compare(row[col_index], symbol, value):
-                        new_row.append(row)
+                new_row_loop = rows
+                start = where_index + 1
+                end = start + 3
+                while(True):
+                    where_block = update[start:end]      
+                    if len(where_block) != 3:
+                        print("Invalid syntax for WHERE clause")
+                        break
+                    column, symbol, value = where_block
+                    if column not in header:
+                        print("Column not found")
+                        break
+                    col_index = header.index(column)
+                    for row in new_row_loop:
+                        if compare(row[col_index], symbol, value):
+                            new_row.append(row)
+                    try:
+                        and_statement = update[end]
+                        if and_statement == "AND":
+                            start = end + 1
+                            end = start + 3
+                            new_row_loop = new_row
+                            new_row = []
+                            continue
+                        else:
+                            break
+                    except IndexError:
+                        #out of bounds
+                        break
             else:
                 new_row = rows
             updateFile(new_row, col, data, header, path, rows)

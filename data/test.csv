@@ -1,8 +1,8 @@
 name,age,grade,city,score
-David,16,A,SanJose,92
-Michael,17,A+,Cupertino,88
-Sarah,15,B,SanJose,85
-Alex,16,A,MountainView,90
-Jamie,17,B+,Sunnyvale,78
-Chris,16,C,SanJose,70
-Taylor,18,A+,PaloAlto,95
+David,16,A,SanJose,3
+Michael,17,A+,Cupertino,5
+Sarah,15,B,SanJose,3
+Alex,16,A,MountainView,3
+Jamie,17,B+,Sunnyvale,5
+Chris,16,C,SanJose,3
+Taylor,18,A+,PaloAlto,5
