@@ -172,6 +172,8 @@ def main():
             for i in range(len(steps)):
                 print(str(i + 1) + ". " + steps[i])
 
+
+
         elif cmd.startswith("UPDATE "):
             if not rows:
                 print("Please load valid file")
@@ -224,6 +226,8 @@ def main():
             updateFile(new_row, col, data, header, path, rows)
             view = print_format(header, new_row, [], [], header)
             print(view)
+
+
 
         elif cmd.startswith("DELETE "):
             if not rows:
@@ -284,6 +288,8 @@ def main():
             view = print_format(header, rows, [], [], header)
             print(view)
 
+
+
         elif cmd.startswith("CREATE "):
             create = cmd.split()
             path = "data/" + create[1] + ".csv"
@@ -292,6 +298,8 @@ def main():
             colsnew.append(cols)
             createHeader(path, colsnew)
             print(f"File '{path}' created successfully")
+
+
 
         elif cmd.startswith("INSERT "):
             if not header:
@@ -310,6 +318,8 @@ def main():
             print(view)
             rows = updateRow(path)
 
+
+
         elif cmd.startswith("VIEW "):
             if not rows:
                 print("No data", "\n")
@@ -321,10 +331,11 @@ def main():
                 selected_cols = []
                 for index in tokens[1:]:
                     if index in ("WHERE", "RANGE", "MAX", "MIN", "AVG", "RCOUNT"):
-                        continue
+                        break
                     if index not in header:
+                        print(index)
                         print("Invalid Syntax: column not found in file")
-                        continue
+                        break
                     selected_cols.append(index)
             
             #start of WHERE and RANGE block
@@ -435,15 +446,6 @@ def main():
             view = print_format(selected_cols, newer_row, func_names, values, header)
             print(view)
 
-
-        elif cmd.startswith("count "):
-            
-            column = cmd.split()[1]
-            value = cmd.split()[2]
-            print("Header: " + column + ", Value: " + value)
-            print(str(compare(column, value, header, rows)) + " matches found")
-        
-        
         else:
             print("Not a valid command")
 
