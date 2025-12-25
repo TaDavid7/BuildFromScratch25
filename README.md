@@ -61,9 +61,13 @@ INSERT val1 val2 ...
 ## Project Structure
 
 ├── main.py # Command loop and user interface 
+
 ├── read_csv.py # CSV loading and database creation
+
 ├── query.py # Query execution logic (VIEW, UPDATE, DELETE, INSERT)
+
 ├── /data # Folder that holds csv (database files)
+
 └── README.md
 
 ---
@@ -91,3 +95,4 @@ EXPLAIN VIEW * WHERE name = DAVID AND age = 16 RANGE 1 5 RCOUNT
 - More aggregations / group-by expansions
 
 ---
+
