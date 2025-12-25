@@ -81,15 +81,96 @@ def main():
             print("Number of rows: ", len(rows))
 
         elif cmd.startswith("EXPLAIN "):
-            if not rows:
-                print("Please load valid file")
-                continue
+            steps = []
             index = 1
             explain = cmd.split()
             if "VIEW" in explain:
-                
-                pass
-                
+                step = "Scan "
+                index += 1
+                if "*" in explain:
+                    step += "all columns"
+                else:
+                    stop = ["WHERE", "RANGE", "RCOUNT", "MAX", "MIN", "AVG"]
+                    while index < len(explain) and explain[index] not in stop:
+                        step += explain[index] + ", "
+                        index += 1
+                steps.append(step)
+                if "WHERE" in explain:
+                    index = explain.index("WHERE")
+                    step = "Apply where "
+                    step += explain[index + 1] + " " + explain[index + 2] + " " + explain[index + 3]
+                    while index + 4 < len(explain) and explain[index + 4] == "AND":
+                        index += 4
+                        step += " and " + explain[index + 1] + " " + explain[index + 2] + " " + explain[index + 3]
+                    steps.append(step)
+                if "RANGE" in explain:
+                    index = explain.index("RANGE")
+                    step = "Apply in the range of columns " + explain[index + 1] + " to " + explain[index + 2] 
+                    steps.append(step)
+                if "MAX" in explain:
+                    index = explain.index("MAX")
+                    step = "Find max in column " + explain[index + 1]
+                    steps.append(step)
+                if "MIN" in explain:
+                    index = explain.index("MIN")
+                    step = "Find min in column " + explain[index + 1]
+                    steps.append(step)
+                if "AVG" in explain:
+                    index = explain.index("AVG")
+                    step = "Find average in column " + explain[index + 1]
+                    steps.append(step)
+                if "RCOUNT" in explain:
+                    index = explain.index("RCOUNT")
+                    step = "Find number of rows"
+                    steps.append(step)
+            elif "UPDATE" in explain:
+                index = 1
+                step = "Change the " + explain[index + 1] + " to " + explain[index + 3]
+                steps.append(step)
+                if "WHERE" in explain:
+                    index = explain.index("WHERE")
+                    step = "Apply where "
+                    step += explain[index + 1] + " " + explain[index + 2] + " " + explain[index + 3]
+                    while index + 4 < len(explain) and explain[index + 4] == "AND":
+                        index += 4
+                        step += " and " + explain[index + 1] + " " + explain[index + 2] + " " + explain[index + 3]
+                    steps.append(step)
+            elif "DELETE" in explain:
+                index = 1
+                step = "Delete the row where "
+                steps.append(step)
+                if "WHERE" in explain:
+                    index = explain.index("WHERE")
+                    step = "Apply where "
+                    step += explain[index + 1] + " " + explain[index + 2] + " " + explain[index + 3]
+                    while index + 4 < len(explain) and explain[index + 4] == "AND":
+                        index += 4
+                        step += " and " + explain[index + 1] + " " + explain[index + 2] + " " + explain[index + 3]
+                    steps.append(step)
+            elif "CREATE" in explain:
+                index = 1
+                step = "Create file called " + explain[index + 1] + " with columns: "
+                loop_idx = index+2
+                while loop_idx < len(explain):
+                    if loop_idx == len(explain)-1:
+                        step += explain[loop_idx]
+                    else:
+                        step += explain[loop_idx] + ", "
+                    loop_idx += 1
+                steps.append(step)
+            elif "INSERT" in explain:
+                index = 1
+                step = "Insert values: "
+                loop_idx = index+1
+                while loop_idx < len(explain):
+                    if loop_idx == len(explain)-1:
+                        step += explain[loop_idx]
+                    else:
+                        step += explain[loop_idx] + ", "
+                    loop_idx += 1
+                steps.append(step)
+            for i in range(len(steps)):
+                print(str(i + 1) + ". " + steps[i])
 
         elif cmd.startswith("UPDATE "):
             if not rows:
