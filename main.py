@@ -42,7 +42,7 @@ UPDATE - do this later
 
 """
 from read_csv import load_csv
-from query import print_format, compare, max, min, avg, rcount, insertRow, createHeader, updateFile, updateRow
+from query import print_format, compare, max, min, avg, rcount, clear, insertRow, createHeader, updateFile, updateRow, deleteCol
 
 
 
@@ -80,6 +80,9 @@ def main():
             print("Number of rows: ", len(rows))
 
         elif cmd.startswith("UPDATE "):
+            if not rows:
+                print("Please load valid file")
+                continue
             update = cmd.split()
             update_block = update[1:4]
             col = update_block[0]
@@ -106,6 +109,28 @@ def main():
                 new_row = rows
             updateFile(new_row, col, data, header, path, rows)
             view = print_format(header, new_row, [], [], header)
+            print(view)
+
+        elif cmd.startswith("DELETE "):
+            if not rows:
+                print("Please load valid file")
+                continue
+            delete = cmd.split()
+            if "WHERE" not in delete:
+                print("Invalid syntax")
+                continue
+            delete_block = delete[1:]
+            if len(delete_block) != 4:
+                print("Invalid syntax")
+                continue
+            col = delete_block[1]
+            col_index = header.index(col)
+            sym = delete_block[2]
+            value = delete_block[3]
+            rows = deleteCol(col_index, sym, value, path)
+            clear(path)
+            insertRow(path, rows)
+            view = print_format(header, rows, [], [], header)
             print(view)
 
         elif cmd.startswith("CREATE "):

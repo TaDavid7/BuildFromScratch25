@@ -123,6 +123,10 @@ def count(column, data, header, rows):
             total += 1
     return total
 
+def clear(path):
+    with open(path, 'w', newline='\n') as f:
+        pass #does nothing, just clears
+
 def insertRow(path, row):
     with open(path, 'a', newline='\n') as f:
         writer = csv.writer(f)
@@ -159,3 +163,12 @@ def updateRow(path):
     for line in lines[1:]:
         row.append(line.split(","))
     return row
+
+def deleteCol(col_idx, symbol, value, path):
+    updated_row = []
+    with open(path, "r", newline = "") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if not compare(row[col_idx], symbol, value):
+                updated_row.append(row)
+    return updated_row
