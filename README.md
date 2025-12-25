@@ -15,7 +15,8 @@ Instead of complex grammar, this project uses a **keyword‑based pipeline synta
 - Range slicing (`RANGE`)
 - Aggregations (`COUNT`, `AVG`, `MIN`, `MAX`)
 - **EXPLAIN mode** to show execution steps instead of running the query
-- 
+
+  
 ---
 ## Command Grammar
 The query language is keyword‑based and executed as a left‑to‑right pipeline.
@@ -95,4 +96,5 @@ EXPLAIN VIEW * WHERE name = DAVID AND age = 16 RANGE 1 5 RCOUNT
 - More aggregations / group-by expansions
 
 ---
+
 
