@@ -87,8 +87,12 @@ def main():
             update = cmd.split()
             update_block = update[1:4]
             col = update_block[0]
+            if update_block[1] != "=":
+                print("Invalid syntax")
+                continue
             data = update_block[2]
             new_row = []                           #make sure the WHERE and RANGE limit select first. The array is updated but not the print
+            new_row_loop = []
             if "WHERE" in update:
                 where_index = update.index("WHERE")
             else:
@@ -137,17 +141,51 @@ def main():
             if "WHERE" not in delete:
                 print("Invalid syntax")
                 continue
-            delete_block = delete[1:]
-            if len(delete_block) != 4:
-                print("Invalid syntax")
-                continue
-            col = delete_block[1]
-            col_index = header.index(col)
-            sym = delete_block[2]
-            value = delete_block[3]
-            rows = deleteCol(col_index, sym, value, path)
+
+            new_row = []
+            new_row_loop = []
+            if "WHERE" in delete:
+                where_index = delete.index("WHERE")
+            else:
+                where_index = -1
+            if where_index != -1:
+                new_row_loop = rows
+                start = where_index + 1
+                end = start + 3
+                while(True):
+                    where_block = delete[start:end]      
+                    if len(where_block) != 3:
+                        print("Invalid syntax for WHERE clause")
+                        break
+                    column, symbol, value = where_block
+                    if column not in header:
+                        print("Column not found")
+                        break
+                    col_index = header.index(column)
+                    for row in new_row_loop:
+                        if not compare(row[col_index], symbol, value):
+                            new_row.append(row)
+                    try:
+                        and_statement = delete[end]
+                        if and_statement == "AND":
+                            start = end + 1
+                            end = start + 3
+                            new_row_loop = new_row
+                            new_row = []
+                            continue
+                        else:
+                            break
+                    except IndexError:
+                        #out of bounds
+                        break
+            else:
+                new_row = []
             clear(path)
-            insertRow(path, rows)
+            first_row = []
+            first_row.append(header)
+            insertRow(path, first_row)
+            insertRow(path, new_row)
+            header, rows = load_csv(path)
             view = print_format(header, rows, [], [], header)
             print(view)
 
