@@ -42,7 +42,7 @@ UPDATE - do this later
 
 """
 from read_csv import load_csv
-from query import print_format, compare, max, min, avg, rcount, clear, insertRow, createHeader, updateFile, updateRow, deleteCol
+from query import print_format, compare, max, min, avg, rcount, clear, insertRow, createHeader, updateFile, updateRow
 
 
 
@@ -51,8 +51,8 @@ def main():
     print("Database")
     print("Commands:")
     print("  load <csv_path>")
-    print("  UPDATE <col> <row> <value>")
-    print("  DELETE <col> <sym> <value>")
+    print("  UPDATE <col> = <value> WHERE ...")
+    print("  DELETE WHERE ... ")
     print("  CREATE <filename>")
     print("  INSERT <val1> <val2> ...")
     print("  VIEW <col1> <col2> ...")
@@ -79,6 +79,17 @@ def main():
         elif cmd == "rows":
 
             print("Number of rows: ", len(rows))
+
+        elif cmd.startswith("EXPLAIN "):
+            if not rows:
+                print("Please load valid file")
+                continue
+            index = 1
+            explain = cmd.split()
+            if "VIEW" in explain:
+                
+                pass
+                
 
         elif cmd.startswith("UPDATE "):
             if not rows:
@@ -149,6 +160,8 @@ def main():
             else:
                 where_index = -1
             if where_index != -1:
+                firstTime = True
+                pers = []
                 new_row_loop = rows
                 start = where_index + 1
                 end = start + 3
@@ -163,14 +176,16 @@ def main():
                         break
                     col_index = header.index(column)
                     for row in new_row_loop:
-                        if not compare(row[col_index], symbol, value):
+                        if compare(row[col_index], symbol, value) and (firstTime or (row in pers)):
                             new_row.append(row)
                     try:
                         and_statement = delete[end]
                         if and_statement == "AND":
+                            firstTime == False
                             start = end + 1
                             end = start + 3
                             new_row_loop = new_row
+                            pers = new_row
                             new_row = []
                             continue
                         else:
@@ -178,13 +193,12 @@ def main():
                     except IndexError:
                         #out of bounds
                         break
-            else:
-                new_row = []
             clear(path)
             first_row = []
             first_row.append(header)
             insertRow(path, first_row)
-            insertRow(path, new_row)
+            result = [item for item in rows if item not in new_row]
+            insertRow(path, result)
             header, rows = load_csv(path)
             view = print_format(header, rows, [], [], header)
             print(view)
