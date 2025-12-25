@@ -86,8 +86,11 @@ EXPLAIN VIEW * WHERE name = DAVID AND age = 16 RANGE 1 5 RCOUNT
 ## Future Work
 - Multi-table engine
 - More aggregations / group-by expansions
+- Explicit primary id
+- block pruning
 
 ---
+
 
 
 
